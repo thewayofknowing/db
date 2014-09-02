@@ -16,7 +16,7 @@ public class DBSystem {
 	
 	final int CacheSize = 100;
 	HashMap<String, Integer> tableNameToInt = new HashMap<>();
-	Vector<Vector<Pair>> listOfMaps = new Vector<Vector<Pair>>();
+	Vector<Vector<Page>> listOfMaps = new Vector<Vector<Page>>();
 	List<Page> pages = new ArrayList<Page>();
 	int PAGESIZE,NUM_PAGES;
 	String PATH_FOR_DATA;
@@ -60,12 +60,12 @@ public class DBSystem {
 			String currentLine;
 			for(Map.Entry<String, Integer> entry: tableNameToInt.entrySet()) {
 				br = new BufferedReader(new FileReader(PATH_FOR_DATA + entry.getKey()));
-				Vector<Pair> table = listOfMaps.get(entry.getValue());
-				int start=0,end=0,currentSize=0;
+				Vector<Page> table = listOfMaps.get(entry.getValue());
+				int start=0,end=0,currentSize=0,pageNumber=0;
 				while((currentLine = br.readLine())!=null) {
 					currentSize+=currentLine.length();
 					if(currentSize>PAGESIZE) {
-						table.add(new Pair(start,end));
+						table.add(new Page(pageNumber++,start,end));
 						start=end+1;
 					}
 					else {
@@ -77,7 +77,6 @@ public class DBSystem {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -96,5 +95,11 @@ public class DBSystem {
 	
 	public static class Page {
 		String page;
+		Integer pageNumber;
+		Pair limit;
+		public Page(int id,int start,int end) {
+			this.pageNumber = id;
+			this.limit = new Pair(start, end);
+		}
 	}
 }
