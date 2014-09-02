@@ -11,14 +11,14 @@ public class DBSystem {
 	
 	final int CacheSize = 100;
 	HashMap<String, Integer> tableNameToInt = new HashMap<>();
-	Vector<Vector<Pair>> listOfMaps = new Vector<Vector<Pair>>();
+	Vector<Vector<Page>> listOfMaps = new Vector<Vector<Page>>();
 	List<Page> pages = new ArrayList<Page>();
 	int pageSize,numPages;
 	int numberOfTables;
 	Queue<Page> cache = new LinkedList<Page>();
 	
+	
 	public void readConfig(String configFilePath) {
-		
 	}
 
 	public void populatePageInfo() {
@@ -31,12 +31,37 @@ public class DBSystem {
 	    middle = (first + last)/2;
 	    while( first <= last )
 	    {
-	      Pair mid = listOfMaps[tableNumber][middle];
-	      if ( mid. < recordId )
+	      Page midPage = listOfMaps[tableNumber][middle];
+	      if ( midPage.limit.end < recordId )
 	        first = middle + 1;    
-	      else if ( array[middle] == search ) 
+	      else if ( midPage.limit.start <= recordId && midPage.limit.end >= recordId) 
 	      {
-	        System.out.println(search + " found at location " + (middle + 1) + ".");
+	        //System.out.println(search + " found at location " + (middle + 1) + ".");
+	    	if (cache.contains(midPage))
+	    	{
+	    		if (cache[cache.size() - 1] != midPage])
+	    		{
+	    			//Cache already has the Page.
+	    			cache.remove(midPage);
+	    			cache.add(midPage);
+	    		}
+	    		System.out.println("HIT");
+	    	}
+	    	else
+	    	{
+	    		if (cache.size < numPages)
+	    		{
+	    			//Cache not full. Adding a Page to cache;
+	    			cache.add(midPage);
+	    		}
+	    		else
+	    		{
+	    			//Cache full and some page is replaced.
+	    			Page replacedPage = cache.remove();
+	    			cache.add(midPage);
+	    			System.out.println("MISS" + replacedPage.pageNumber);
+	    		}
+	    	}
 	        break;
 	      }
 	      else
@@ -44,7 +69,6 @@ public class DBSystem {
 	 
 	      middle = (first + last)/2;
 	   }
-		listOfMaps[tableNumber][] 
 		return "record";
 	}
 	
@@ -54,5 +78,7 @@ public class DBSystem {
 	
 	public static class Page {
 		String page;
+		Integer pageNumber;
+		Pair limit;
 	}
 }
