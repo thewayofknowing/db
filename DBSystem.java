@@ -60,8 +60,17 @@ public class DBSystem {
 			String currentLine;
 			for(Map.Entry<String, Integer> entry: tableNameToInt.entrySet()) {
 				br = new BufferedReader(new FileReader(PATH_FOR_DATA + entry.getKey()));
+				Vector<Pair> table = listOfMaps.get(entry.getValue());
+				int start=0,end=0,currentSize=0;
 				while((currentLine = br.readLine())!=null) {
-					
+					currentSize+=currentLine.length();
+					if(currentSize>PAGESIZE) {
+						table.add(new Pair(start,end));
+						start=end+1;
+					}
+					else {
+						end++;
+					}
 				}
 			}
 				
@@ -78,7 +87,11 @@ public class DBSystem {
 	}
 	
 	public static class Pair {
-		int start,end;
+		public int start,end;
+		public Pair(int a,int b) {
+			this.start = a;
+			this.end = b;
+		}
 	}
 	
 	public static class Page {
