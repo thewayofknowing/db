@@ -51,7 +51,7 @@ public class DBSystem {
                         //if i > parax
                         tableNameToInt.put(params[++i], tableCount++);
                         Vector<Page> vectorPage = new Vector<Page>();
-                        vectorPage.add(new Page(0, 0, 0));
+                        vectorPage.add(new Page(0, 0, 0, 0));
                         listOfMaps.add(vectorPage);
                         while(params[++i].equals("END")==false) {
                                 //REad TABle attributes
@@ -77,7 +77,7 @@ public class DBSystem {
                                 		currentPage.currentSize += currentLine.length();
                                         if(currentPage.currentSize>PAGESIZE) {
                                         	    if(pageNumber==0) table.get(pageNumber).limit.end = end;
-                                                table.add(new Page(pageNumber++,start,end));
+                                                table.add(new Page(pageNumber++,entry.getValue(),start,end));
                                                 currentPage = table.get(pageNumber);
                                                 start=end+1;
                                         }
@@ -103,10 +103,12 @@ public class DBSystem {
                 while( first <= last )
                 {
                         Page midPage = listOfMaps.get(tableNumber).get(middle);
+                        System.out.println(midPage.limit.start + "End: " + midPage.limit.end);
                         if ( midPage.limit.end < recordId )
                                 first = middle + 1;    
                         else if ( midPage.limit.start <= recordId && midPage.limit.end >= recordId) 
                         {
+                                System.out.println("here\n");
                                 //System.out.println(search + " found at location " + (middle + 1) + ".");
                                 if (cache.contains(midPage))
                                 {
@@ -124,6 +126,7 @@ public class DBSystem {
                                         {
                                                 //Cache not full. Adding a Page to cache;
                                                 cache.add(midPage);
+                                                System.out.println("New Page added to the LRU cache!\nPage Number: "+ midPage.pageNumber);
                                         }
                                         else
                                         {
@@ -154,7 +157,7 @@ public class DBSystem {
         	}
         	else
         	{
-        		listOfMaps.get(tableNumber).add(new Page(lastPage.pageNumber + 1, 0, 0));
+        		listOfMaps.get(tableNumber).add(new Page(lastPage.pageNumber + 1, lastPage.tableNumber, 0, 0));
         		Page addedPage = listOfMaps.get(tableNumber).get(tablePages);
         		addedPage.limit.end ++;
         	}
@@ -172,9 +175,11 @@ public class DBSystem {
                 String page;
                 Integer pageNumber;
                 Pair limit;
-                int currentSize;
-                public Page(int id,int start,int end) {
+                int currentSize,tableNumber;
+                
+                public Page(int id,int tableNumber,int start,int end) {
                         this.pageNumber = id;
+                        this.tableNumber = tableNumber;
                         this.limit = new Pair(start, end);
                 }
         }
@@ -184,8 +189,8 @@ public class DBSystem {
                 DBSystem d = new DBSystem();
                 d.readConfig("./config.txt");
                 d.populateDBInfo();
+                d.getRecord("employee", 1);
                 d.getRecord("employee", 0);
                 //System.out.println(d.PageSize);
         }
 }
-
