@@ -8,7 +8,7 @@ import java.util.Vector;
 import java.io.*;
 
 /* Code belongs to Kartik Kohli & Jigar Thakkar :P 
-** Just kidding, do as you wish with it. 
+** Just kidding, do as you wish with 
 ** Beware Moss :P	
 */
 
