@@ -40,6 +40,7 @@ public class DBSystem {
                         e.printStackTrace();
                 }
                 String[] params = str.split("\n");
+                System.out.println(params[0]);
                 //Extracting Parameters from config file    
                 PAGESIZE = Integer.valueOf(params[0].split(" ")[1]); 
                 NUM_PAGES = Integer.valueOf(params[1].split(" ")[1]);
@@ -82,6 +83,7 @@ public class DBSystem {
                                                 start=end+1;
                                         }
                                         else {
+                                                table.get(pageNumber).limit.end = end;
                                                 end++;
                                         }
                                 }
@@ -108,7 +110,7 @@ public class DBSystem {
                                 first = middle + 1;    
                         else if ( midPage.limit.start <= recordId && midPage.limit.end >= recordId) 
                         {
-                                System.out.println("here\n");
+                                System.out.println("here: \n" + recordId + "\n");
                                 //System.out.println(search + " found at location " + (middle + 1) + ".");
                                 if (cache.contains(midPage))
                                 {
@@ -150,6 +152,7 @@ public class DBSystem {
         	int tableNumber = tableNameToInt.get(tableName);
         	int tablePages = listOfMaps.get(tableNumber).size();
         	Page lastPage = listOfMaps.get(tableNumber).get(tablePages - 1);
+                System.out.println(lastPage.limit.end + "");
         	lastPage.currentSize += record.length(); 
         	if (lastPage.currentSize <= PAGESIZE)
         	{
@@ -161,6 +164,7 @@ public class DBSystem {
         		Page addedPage = listOfMaps.get(tableNumber).get(tablePages);
         		addedPage.limit.end ++;
         	}
+                System.out.println(lastPage.limit.end + "");
         }
         
         public static class Pair {
@@ -191,6 +195,7 @@ public class DBSystem {
                 d.populateDBInfo();
                 d.getRecord("employee", 1);
                 d.getRecord("employee", 0);
+                d.insertRecord("employee", "\"1\",\"abc\"");
                 //System.out.println(d.PageSize);
         }
 }
