@@ -7,7 +7,10 @@ import java.util.Queue;
 import java.util.Vector;
 import java.io.*;
 
-/* Code belongs to Kartik Kohli & Jigar Thakkar :P */
+/* Code belongs to Kartik Kohli & Jigar Thakkar :P 
+** Just kidding, do as you wish with it. 
+** Beware Moss :P	
+*/
 
 public class DBSystem {
 
